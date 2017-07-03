@@ -1,9 +1,3 @@
-def print_help(board):
-    print('===========result===========')
-    for row in board:
-        print(row)
-
-
 def put_block(board):
     changed = False
     height = len(board)
@@ -53,6 +47,7 @@ def put_block(board):
                 board[i + 1][j] = '.'
                 board[i + 1][j + 1] = '.'
             # ┘ shape
+            # exception: ['#.', '..']
             if j > 0 and i < height - 1 and board[i + 1][j] == '.' and board[i + 1][j - 1] == '.':
                 changed = True
                 board[i][j] = 'w'

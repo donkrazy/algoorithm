@@ -2,14 +2,12 @@ def make_combinations(topick, picked, ret):
     if len(topick) == 0:
         ret.append(picked)
         return
-    
     i = topick[0]
     for j in topick[1:]:
         picked_copy = picked.copy()
         picked_copy.append({i, j})
-        topick_copy = [k for k in topick[1:] if k!=j]
+        topick_copy = [k for k in topick[1:] if k != j]
         make_combinations(topick_copy, picked_copy, ret)
-        
 
 
 c = int(input())
@@ -32,5 +30,4 @@ for prob in range(c):
 
         if flag:
             count += 1
-    
     print(count)
