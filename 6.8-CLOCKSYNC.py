@@ -34,19 +34,20 @@ def check(picked_list):
     return False
 
 
-def traverse(picked_list, num_pick):
+def traverse(num_topick, num_picked=0, picked_list=None, pick_min=0):
+    if picked_list is None:
+        picked_list = [0] * 10
     has_found = False
-    if sum(picked_list) > num_pick:
-        return False
-    if len(picked_list) > 10:
-        return False
-    if sum(picked_list) == num_pick:
+
+    if num_topick == num_picked:
         return check(picked_list)
 
-    for i in range(4):
-        picked_list.append(i)
-        has_found |= traverse(picked_list, num_pick)
-        picked_list.pop()
+    for i in range(pick_min, len(picked_list)):
+        if picked_list[i] < 3:
+            picked_list[i] += 1
+            has_found |= traverse(num_topick, num_picked + 1, picked_list, i)
+            picked_list[i] -= 1
+
     return has_found
 
 
@@ -55,8 +56,13 @@ for prob in range(num_prob):
     has_found = False
     original = [int(i) / 3 for i in input().split()]
     for j in range(1, 40):
-        has_found = traverse([], j)
+        has_found = traverse(num_topick=j)
         if has_found:
             break
     if not has_found:
         print(-1)
+
+# original = [0] * 16
+# for i in range(1, 31):
+#     print(i)
+#     traverse(i)
