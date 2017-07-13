@@ -17,54 +17,46 @@ for item in switch_info.split('\n')[1:-1]:
     condition_dict[int(item[0])] = available
 
 
-def check(picked, original):
-    # picked = [1,1,1,1,1,1,1,1,1,1,1,1]
+def check(picked_list):
+    # picked_list = [1,1,1,1,1,1,1,1,1,1,1,1]
     # condition_dict = {1: [0000011], 2:[1110000], ... }
     a = []
     a.append(original)
-    for i in range(10):
-        k = picked[i]
+    for i in range(len(picked_list)):
+        k = picked_list[i]
         ll = [k * j for j in condition_dict[i]]
         a.append(ll)
 
     f = [sum(i) % 4 for i in zip(*a)]
     if all(v == 0 for v in f):
-        print(sum(picked))
+        print(sum(picked_list))
+        return True
+    return False
 
 
-def traverse(picked, original):
-    if len(picked) == 10:
-        check(picked, original)
-        return
+def traverse(picked_list, num_pick):
+    has_found = False
+    if sum(picked_list) > num_pick:
+        return False
+    if len(picked_list) > 10:
+        return False
+    if sum(picked_list) == num_pick:
+        return check(picked_list)
+
     for i in range(4):
-        picked.append(i)
-        traverse(picked, original)
-        picked.pop()
+        picked_list.append(i)
+        has_found |= traverse(picked_list, num_pick)
+        picked_list.pop()
+    return has_found
 
 
 num_prob = int(input())
 for prob in range(num_prob):
+    has_found = False
     original = [int(i) / 3 for i in input().split()]
-    traverse([], original)
-
-# def check(time_list, depth):
-#     if depth == 0:
-#         return False
-
-#     for i in range(10):
-#         flag = True
-#         for clock_idx in switch_list[i]:
-#             time_list[clock_idx] += 3
-#         for time in time_list:
-#             if time % 12 != 0:
-#                 flag = False
-#         for clock_idx in switch_list[i]:
-#             time_list[clock_idx] -= 3
-#         if flag:
-#             break
-# num_prob = int(input())
-# for prob in range(num_prob):
-#     time_list = [int(i) for i in input().split()]
-#     for depth in range(1, 10):
-#         check()
-#         print(depth)
+    for j in range(1, 40):
+        has_found = traverse([], j)
+        if has_found:
+            break
+    if not has_found:
+        print(-1)
