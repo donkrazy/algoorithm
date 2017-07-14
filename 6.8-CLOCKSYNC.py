@@ -1,6 +1,4 @@
-from itertools import starmap
-from operator import mul
-import array
+import numpy
 
 switch_info = '''
 0   0, 1, 2
@@ -27,10 +25,10 @@ def check(picked_list):
     # picked_list = [1,1,1,1,1,1,1,1,1,1,1,1]   # 10 by 1
     # inner_product = switch_list (dot) picked_list   # 16 by 1
     # y = inner_product + init_condition  # 16 by 1
-    inner_product = array.array('I', [sum(starmap(mul, zip(picked_list, col))) for col in zip(*switch_list)])
-    y = [sum(i) % 4 for i in zip(inner_product, init_condition)]
+    inner_product = numpy.dot(picked_list, switch_list)
+    y = inner_product + init_condition
 
-    if all(v == 0 for v in y):
+    if all(v == 0 for v in y % 4):
         ans.append(sum(picked_list))
         return True
     return False
