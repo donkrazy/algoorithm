@@ -1,3 +1,6 @@
+from itertools import starmap
+from operator import mul
+
 switch_info = '''
 0   0, 1, 2
 1   3, 7, 9, 11
@@ -10,25 +13,23 @@ switch_info = '''
 8   1, 2, 3, 4, 5
 9   3, 4, 5, 9, 13
 '''
-switch_dict = {}
+switch_list = []
 for item in switch_info.split('\n')[1:-1]:
     idx_list = [int(i) for i in item[1:].split(',')]
     available = [1 if j in idx_list else 0 for j in range(16)]
-    switch_dict[int(item[0])] = available
+    switch_list.append(available)
 
 
 def check(picked_list):
-    # picked_list = [1,1,1,1,1,1,1,1,1,1,1,1]
-    # condition_dict = {1: [0000011], 2:[1110000], ... }
-    a = []
-    a.append(init_condition)
-    for i in range(len(picked_list)):
-        k = picked_list[i]
-        ll = [k * j for j in switch_dict[i]]
-        a.append(ll)
+    # y = ax + b
+    # switch_list = [[0000111122223333], [1111222233330000], ... ]    # 10 by 16
+    # picked_list = [1,1,1,1,1,1,1,1,1,1,1,1]   # 10 by 1
+    # inner_product = switch_list (dot) picked_list   # 16 by 1
+    # y = inner_product + init_condition  # 16 by 1
+    inner_product = [sum(starmap(mul, zip(picked_list, col))) for col in zip(*switch_list)]
+    y = [sum(i) % 4 for i in zip(inner_product, init_condition)]
 
-    f = [sum(i) % 4 for i in zip(*a)]
-    if all(v == 0 for v in f):
+    if all(v == 0 for v in y):
         ans.append(sum(picked_list))
         return True
     return False
