@@ -10,11 +10,11 @@ switch_info = '''
 8   1, 2, 3, 4, 5
 9   3, 4, 5, 9, 13
 '''
-switch_dict = {}
+switch_list = [None] * 10
 for item in switch_info.split('\n')[1:-1]:
-    switch_key = int(item[0])
+    switch_idx = int(item[0])
     switch_target = [int(i) for i in item[1:].split(',')]
-    switch_dict[switch_key] = switch_target
+    switch_list[switch_idx] = switch_target
 
 
 INF = 99999
@@ -28,19 +28,19 @@ def are_aligned(clocks):
     return False
 
 
-def push_switch(clocks, switch_key):
-    for clock_idx in switch_dict[switch_key]:
+def push_switch(clocks, switch_idx):
+    for clock_idx in switch_list[switch_idx]:
         clocks[clock_idx] += 1
 
 
-def solve(clocks, switch_key=0):
-    if switch_key == SWITCHES:
+def solve(clocks, switch_idx=0):
+    if switch_idx == SWITCHES:
         return 0 if are_aligned(clocks) else INF
 
     ret = INF
     for count in range(4):
-        ret = min(ret, count + solve(clocks, switch_key + 1))
-        push_switch(clocks, switch_key)
+        ret = min(ret, count + solve(clocks, switch_idx + 1))
+        push_switch(clocks, switch_idx)
     return ret
 
 
