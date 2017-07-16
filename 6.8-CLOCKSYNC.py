@@ -12,50 +12,40 @@ switch_info = '''
 '''
 switch_dict = {}
 for item in switch_info.split('\n')[1:-1]:
-    idx_list = [int(i) for i in item[1:].split(',')]
-    available = [1 if j in idx_list else 0 for j in range(16)]
-    switch_dict[int(item[0])] = available
+    switch_key = int(item[0])
+    switch_target = [int(i) for i in item[1:].split(',')]
+    switch_dict[switch_key] = switch_target
 
 
-def check(picked_list, init_condition):
-    # y = ax + b
-    y = []
-    y.append(init_condition)
-    for i in range(len(picked_list)):
-        k = picked_list[i]
-        ll = [k * j for j in switch_dict[i]]
-        y.append(ll)
+INF = 99999
+SWITCHES = 10
+CLOCKS = 16
 
-    y = [sum(i) % 4 for i in zip(*y)]
-    if all(v == 0 for v in y):
-        ans.append(sum(picked_list))
+
+def are_aligned(clocks):
+    if all(clock % 4 == 0 for clock in clocks):
         return True
     return False
 
 
-def generate_list(picked_list=None):
-    if picked_list is None:
-        picked_list = []
-
-    if len(picked_list) == 10:
-        available_list.append(list(picked_list))
-        return
-
-    for i in range(4):
-        picked_list.append(i)
-        generate_list(picked_list)
-        picked_list.pop()
+def push_switch(clocks, switch_key):
+    for clock_idx in switch_dict[switch_key]:
+        clocks[clock_idx] += 1
 
 
-available_list = []
-generate_list()
+def solve(clocks, switch_key=0):
+    if switch_key == SWITCHES:
+        return 0 if are_aligned(clocks) else INF
+
+    ret = INF
+    for count in range(4):
+        ret = min(ret, count + solve(clocks, switch_key + 1))
+        push_switch(clocks, switch_key)
+    return ret
 
 
 num_prob = int(input())
 for prob in range(num_prob):
-    ans = []
-    init_condition = [int(i) / 3 for i in input().split()]
-    for item in available_list:
-        if check(item, init_condition):
-            ans.append(sum(item))
-    print(min(ans) if len(ans) != 0 else -1)
+    clocks = [int(i) / 3 for i in input().split()]
+    result = solve(clocks)
+    print(result if result < INF else -1)
