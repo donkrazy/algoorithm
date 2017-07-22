@@ -12,7 +12,7 @@ def make_combinations(topick, picked, ret):
 
 c = int(input())
 for prob in range(c):
-    # generate dataset
+    # generate dataset..
     n, m = (int(i) for i in input().split())
     pairs_available = []
     make_combinations(list(range(n)), [], pairs_available)

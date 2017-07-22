@@ -6,7 +6,7 @@ def put_block(board):
 
     for i in range(height):
         for j in range(width):
-            # some block already exist
+            # some block already exist.
             if board[i][j] != '.':
                 continue
 
