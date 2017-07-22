@@ -19,7 +19,6 @@ for item in switch_info.split('\n')[1:-1]:
 
 INF = 99999
 SWITCHES = 10
-CLOCKS = 16
 
 
 def are_aligned(clocks):
