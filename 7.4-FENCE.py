@@ -1,31 +1,27 @@
-def narashi(height_list):
-    changed = False
-    for i in range(len(height_list) - 1):
-        left = height_list[i]
-        right = height_list[i + 1]
-        if left == 0 or right == 0 or left == right:
-            continue
-        # left != right
-        changed = True
-        # clean code
-        if left > right:  
-            area_c = right * 2
-            if left > area_c:
-                height_list[i + 1] = 0
-            else:
-                height_list[i] = right
+def solve(left, right):
+    # base case
+    if left == right:
+        return height_list[left]
+
+    # left max, right max area
+    mid = int((left + right) / 2)
+    ret = max(solve(left, mid), solve(mid + 1, right))
+
+    # center rectangle area width=2
+    i, j = mid, mid + 1
+    height = min(height_list[i], height_list[j])
+    ret = max(ret, height * 2)
+
+    # expand center rectangle
+    while left < i or j < right:
+        if j < right and (i == left or height_list[i - 1] < height_list[j + 1]):
+            j += 1
+            height = min(height, height_list[j])
         else:
-            area_c = left * 2
-            if right > area_c:
-                height_list[i] = 0
-            else:
-                height_list[i + 1] = left
-    return changed
-
-
-def get_area(height_list):
-    area_list = []
-    return max(area_list)
+            i -= 1
+            height = min(height, height_list[i])
+        ret = max(ret, height * (j - i + 1))
+    return ret
 
 
 if __name__ == '__main__':
@@ -33,11 +29,4 @@ if __name__ == '__main__':
     for prob in range(num_prob):
         n = int(input())
         height_list = [int(i) for i in input().split()]
-        while True:
-            has_changed = narashi(height_list)
-            if not has_changed:
-                break
-        # max_area = get_area(height_list)
-        # print(max_area)
-        print(height_list)
-        
+        print(solve(0, n - 1))
