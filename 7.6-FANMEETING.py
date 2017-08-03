@@ -1,23 +1,25 @@
-# iterate fan_list to check match
-def count(fan_list, member_list):
-    ret = 0
-    num_member = len(member_list)
-    for group in (fan_list[i - num_member: i] for i in range(num_member, len(fan_list) + 1)):
-        embarrased = False
-        for member, fan in zip(member_list, group):
-            if member == 'M' and fan == 'M':
-                embarrased = True
-                break
-        if embarrased:
-            continue
-        else:
-            ret += 1
-    return ret
+def solve(a, b):
+    # 1) multiply with 'b' reversed, without rounding up
+    c = [0] * (len(a) + len(b) - 1)
+    b.reverse()
+    for i in range(len(a)):
+        for j in range(len(b)):
+            # c[i + j] += a[i] * b[j]
+            c[i + j] |= a[i] & b[j]  # boolean version
+
+    # 2) count 0 in c except for a partial hug
+    count = 0
+    for k in c[len(a) - 1:len(c) - len(a) + 1]:
+        if k == 0:
+            count += 1
+    return count
 
 
 if __name__ == '__main__':
     num_prob = int(input())
     for prob in range(num_prob):
-        member_list = list(input())
-        fan_list = list(input())
-        print(count(fan_list, member_list))
+        # member_list = [1 if i == 'M' else 0 for i in input()]
+        # fan_list = [1 if i == 'M' else 0 for i in input()]
+        member_list = [True if i == 'M' else False for i in input()]  # boolean version
+        fan_list = [True if i == 'M' else False for i in input()]  # boolean version
+        print(solve(member_list, fan_list))
