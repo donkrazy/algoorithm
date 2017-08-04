@@ -5,6 +5,7 @@ def multiply(a, b):
             c[i + j] += a[i] * b[j]
     return c
 
+
 # a += b * 10^k
 def add(a, b, k=0):
     for i in range(k):
@@ -18,7 +19,7 @@ def add(a, b, k=0):
         j -= 1
         a[j] += i
     return a
-        
+
 
 # a -= b
 def subtract(a, b):
@@ -28,10 +29,10 @@ def subtract(a, b):
             continue
         j -= 1
         a[j] -= i
-        
+
 
 def normalize(a):
-    for i in range(len(a)-1, 1, -1):  # omit prepend
+    for i in range(len(a) - 1, 1, -1):  # omit prepend
         if a[i] >= 10:
             a[i - 1] += int(a[i] / 10)
             a[i] = a[i] % 10
@@ -49,34 +50,34 @@ def karatsuba(a, b):
         return []
     if len(a) <= 50:
         return multiply(a, b)
-    
+
     # 2) split: a = a0 + a1; b = b0 + b1;
     half = int(len(a) / 2)
     a0 = a[:half]
     a1 = a[half:]
     b0 = b[:min(half, len(b))]
     b1 = b[min(half, len(b)):]
-    
-    # 3) z0 = a0 * b0; z2 = a1 * b1; 
+
+    # 3) z0 = a0 * b0; z2 = a1 * b1;
     #    z1 = (a0 + a1) * (b0 + b1) - z0 - z2;
     z0 = karatsuba(a0, b0)
-    z2 = karatsuba(a1, b1)    
+    z2 = karatsuba(a1, b1)
     z1 = karatsuba(add(a0, a1), add(b0, b1))
     subtract(z1, z0)
     subtract(z1, z2)
     normalize(z1)
-    
+
     # 4) a * b = z0 + z1 * 10^n + z2 * 10 ^ 2n
     c = add(add(z0, z1, half), z2, 2 * half)
     normalize(c)
     return c
-    
 
-def solve(a, b):
+
+def solve(fan_list, member_list_reversed):
     # count 0 in c except for a partial hug
     count = 0
-    c = karatsuba(a, b)
-    for k in c[len(b) - 1:len(c) - len(b) + 1]:
+    c = karatsuba(fan_list, member_list_reversed)
+    for k in c[len(member_list_reversed) - 1:len(fan_list)]:
         if k == 0:
             count += 1
     return count
