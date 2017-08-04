@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class FanMeeting {
+public class FANMEETING {
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
@@ -13,24 +13,31 @@ public class FanMeeting {
 		scanner.close();
 	}
 
+	//TODO
+	private static int[] add(int[]a, int[] b){
+		return null;
+	}
+
+	private static void subtract(int[] a, int[] b){
+
+	}
+
+	private static void normalize(int[] a){
+
+	}
+
+	private static int[] karatsuba(int[] a, int[] b){
+		return null;
+	}
+
 	private static int count(String[] members, String[] fans) {
-		int ret = 0;
-		int numMember = members.length;
-		int numFan = fans.length;
-		for (int i = 0; i <= numFan - numMember; i++) {
-			boolean embarrased = false;
-			for (int j = 0; j < numMember; j++) {
-				if (members[j].equals("M") && fans[i + j].equals("M")) {
-					embarrased = true;
-				}
-			}
-			if (embarrased) {
-				continue;
-			}
-			else {
-				ret++;
+		int count = 0;
+		int[] c = karatsuba(a, b);
+		for(int i=b.length; i <= c.length - b.length; i++){
+			if(i == 0){
+				count++;
 			}
 		}
-		return ret;
+		return count;
 	}
 }
