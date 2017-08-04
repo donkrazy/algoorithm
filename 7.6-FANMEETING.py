@@ -10,15 +10,22 @@ def add(a, b, k=0):
     for i in range(k):
         a.append(0)
     j = 0
+    if len(a) < len(b):
+        return add(b, a)
     for i in b[::-1]:
+        if i == 0:
+            continue
         j -= 1
         a[j] += i
+    return a
         
 
 # a -= b
 def subtract(a, b):
     j = 0
     for i in b[::-1]:
+        if i == 0:
+            continue
         j -= 1
         a[j] -= i
         
@@ -44,7 +51,7 @@ def karatsuba(a, b):
         return multiply(a, b)
     
     # 2) split: a = a0 + a1; b = b0 + b1;
-    half = int(len(a))
+    half = int(len(a) / 2)
     a0 = a[:half]
     a1 = a[half:]
     b0 = b[:min(half, len(b))]
@@ -53,19 +60,16 @@ def karatsuba(a, b):
     # 3) z0 = a0 * b0; z2 = a1 * b1; 
     #    z1 = (a0 + a1) * (b0 + b1) - z0 - z2;
     z0 = karatsuba(a0, b0)
-    z2 = karatsuba(a1, b1)
-    add(a0, a1)
-    add(b0, b1)
-    z1 = karatsuba(a0, b0)
+    z2 = karatsuba(a1, b1)    
+    z1 = karatsuba(add(a0, a1), add(b0, b1))
     subtract(z1, z0)
     subtract(z1, z2)
     normalize(z1)
     
     # 4) a * b = z0 + z1 * 10^n + z2 * 10 ^ 2n
-    add(z0, z1, half)
-    add(z0, z2, 2 * half)
-    normalize(z0)
-    return z0
+    c = add(add(z0, z1, half), z2, 2 * half)
+    normalize(c)
+    return c
     
 
 def solve(a, b):
