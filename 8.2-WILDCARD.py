@@ -1,4 +1,6 @@
 def match(wildcard, file):
+    ret = True
+
     # case 1: only '?'
     if '*' not in wildcard:
         if len(wildcard) != len(file):
@@ -11,9 +13,15 @@ def match(wildcard, file):
 
     # case 2: only '*':
     if '?' not in wildcard:
-        return False
-
-    return True
+        for i in range(len(wildcard)):
+            if wildcard[i] == '*':
+                for j in range(i, len(file[i:]) - 1):
+                    if wildcard[i + 1] == file[j]:
+                        break
+                ret = match(wildcard[i + 1:], file[j + 1:])
+            elif wildcard[i] != file[i]:
+                return False
+    return ret
 
 
 def solve(wildcard, files):
@@ -32,4 +40,3 @@ if __name__ == '__main__':
         num_files = int(input())
         files = [input() for _ in range(num_files)]
         solve(wildcard, files)
-        break
