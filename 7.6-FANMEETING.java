@@ -112,25 +112,4 @@ public class FANMEETING {
 		}
 		return c;
 	}
-	
-//  안필요함
-//	private static int[] normalize(int[] a) {
-//		for (int i = a.length - 1; i > 0; i--) {
-//			if (a[i] < 0) {
-//				int borrow = (Math.abs(a[i]) + 9) / 10;
-//				a[i - 1] -= borrow;
-//				a[i] += borrow * 10;
-//			} else {
-//				a[i - 1] += a[i] / 10;
-//				a[i] = a[i] % 10;
-//			}
-//		}
-//		if (a[0] >= 10) {
-//			// TODO: 최고자리수 올림
-//		}
-//		if (a[0] == 0) {
-//			// TODO: 앞의 0 다 없애기
-//		}
-//		return a;
-//	}
 }
