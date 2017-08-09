@@ -65,11 +65,9 @@ def karatsuba(a, b):
     z1 = karatsuba(add(a0, a1), add(b0, b1))
     subtract(z1, z0)
     subtract(z1, z2)
-    normalize(z1)
 
     # 4) a * b = z0 + z1 * 10^n + z2 * 10 ^ 2n
     c = add(add(z0, z1, half), z2, 2 * half)
-    normalize(c)
     return c
 
 
