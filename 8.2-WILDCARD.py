@@ -1,27 +1,22 @@
 def match(wildcard, file):
-    ret = True
-
-    # case 1: only '?'
-    if '*' not in wildcard:
-        if len(wildcard) != len(file):
+    pos = 0
+    while pos < len(wildcard) and pos < len(file) and (wildcard[pos] == file[pos] or wildcard[pos] == '?'):
+        pos += 1
+    if pos == len(wildcard):
+        if pos == len(file):
+            return True
+        else:
             return False
-        for i in range(len(wildcard)):
-            if wildcard[i] == '?':
-                continue
-            elif wildcard[i] != file[i]:
-                return False
 
-    # case 2: only '*':
-    if '?' not in wildcard:
-        for i in range(len(wildcard)):
-            if wildcard[i] == '*':
-                for j in range(i, len(file[i:]) - 1):
-                    if wildcard[i + 1] == file[j]:
-                        break
-                ret = match(wildcard[i + 1:], file[j + 1:])
-            elif wildcard[i] != file[i]:
-                return False
-    return ret
+    if pos == len(file):
+        if wildcard[pos] == '*':
+            return True
+
+    if wildcard[pos] == '*':
+        for j in range(pos, len(file) - 1):
+            if match(wildcard[pos + 1:], file[j:]):
+                return True
+    return False
 
 
 def solve(wildcard, files):
