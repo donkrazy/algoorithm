@@ -1,29 +1,31 @@
-def match(wildcard, file):
-    pos = 0
-    while pos < len(wildcard) and pos < len(file) and (wildcard[pos] == file[pos] or wildcard[pos] == '?'):
-        pos += 1
+def match(wildcard, file, i, j):
+    ret = cache(i, j)
+    while i < len(wildcard) and j < len(file) and (wildcard[i] == file[j] or wildcard[i] == '?'):
+        i += 1
+        j += 1
 
     # papa^ / papa^
-    if pos == len(wildcard) and pos == len(file):
+    if i == len(wildcard) and j == len(file):
         return True
 
     # papa^ / papa^dk
-    if pos == len(wildcard) and pos < len(file):
+    if i == len(wildcard) and j < len(file):
         return False
 
     # pap* / papcvz
-    if pos == len(wildcard) - 1 and wildcard[pos] == '*':
+    if i == len(wildcard) - 1 and wildcard[i] == '*':
         return True
 
-    if wildcard[pos] == '*':
-        for j in range(pos, len(file)):
-            if match(wildcard[pos + 1:], file[j:]):
+    if wildcard[i] == '*':
+        for k in range(i, len(file)):
+            if match(wildcard[i + 1:], file[k:]):
                 return True
     return False
 
 
-def solve(wildcard, files):
-    ret = [file for file in files if match(wildcard, file)]
+def solve(wildcard, files, cache):
+    cache = [[-1] * 100 for _ in range(100)]
+    ret = [file for file in files if match(wildcard, file, 0, 0)]
     for file in sorted(ret):
         print(file)
 
