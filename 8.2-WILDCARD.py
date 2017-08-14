@@ -8,8 +8,8 @@ def match(wildcard, file, cache=None, i=0, j=0):  # default value for initializa
         return False
 
     while i < len(wildcard) and j < len(file) and (wildcard[i] == file[j] or wildcard[i] == '?'):
-        i += 1
-        j += 1
+        cache[i][j] = match(wildcard, file, cache, i + 1, j + 1)
+        return cache[i][j]
 
     # papa^ / papa^
     # papa^ / papa^dk
@@ -19,10 +19,9 @@ def match(wildcard, file, cache=None, i=0, j=0):  # default value for initializa
     # papa* / papadfa
     # pa*a / pazzzzzza
     if wildcard[i] == '*':
-        for k in range(j, len(file) + 1):
-            if match(wildcard, file, cache, i + 1, k):
-                cache[i][j] = 1
-                return True
+        if match(wildcard, file, cache, i + 1, j) or (j < len(file) and match(wildcard, file, cache, i, j + 1)):
+            cache[i][j] = 1
+            return True
 
     cache[i][j] = 0
     return False
