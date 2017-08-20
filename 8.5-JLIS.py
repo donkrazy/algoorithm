@@ -1,29 +1,26 @@
 # find jlis starting from A[i:] and B[j:]
 def jlis(i, j, A, B, cache):
     # print('jlis:', i, j)
-    if cache[i][j] != -1:
-        return cache[i][j]
+    if cache[i + 1][j + 1] != -1:
+        return cache[i + 1][j + 1]
     ret = 2
-    # bigger = max(A[i], B[j])
+    a = -999999 if i == -1 else A[i]
+    b = -999999 if j == -1 else B[j]
+    bigger = max(a, b)
     for ii in range(i + 1, len(A)):
-        if A[ii] > A[i] and A[ii] != B[j]:
+        if A[ii] > bigger:
             ret = max(ret, 1 + jlis(ii, j, A, B, cache))
     for jj in range(j + 1, len(B)):
-        if B[jj] > B[j] and B[jj] != A[i]:
+        if B[jj] > bigger:
             ret = max(ret, 1 + jlis(i, jj, A, B, cache))
-    cache[i][j] = ret
+    cache[i + 1][j + 1] = ret
     return ret
 
 
 def find_max(A, B, len_a, len_b):
-    cache = [[-1] * len_b for _ in range(len_a)]
-    ret = 0
-    for i in range(len_a):
-        for j in range(len_b):
-            ret = max(ret, jlis(i, j, A, B, cache))
-    # jlis(0, 0, A, B, cache)
-    print(cache, ret)
-    # print(ret)
+    cache = [[-1] * (len_b + 1) for _ in range(len_a + 1)]
+    ret = jlis(-1, -1, A, B, cache)
+    print(cache, ret - 2)
 
 
 if __name__ == '__main__':
