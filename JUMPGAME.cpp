@@ -1,4 +1,5 @@
 #include <iostream>
+using namespace std;
 
 int n, board[100][100];
 
@@ -11,6 +12,17 @@ bool jump(int y, int x) {
 
 
 int main() {
-    std::cout << "Hello World!";
+    int cases;
+    cin >> cases;
+    while(cases--) {
+        int lines;
+        cin >> lines;
+        cin.ignore();
+        while (lines--) {
+            string line;
+            getline(cin, line);
+            cout << cases << '/' << lines << '/' << line << endl;
+        }
+    }
     return 0;
 }
