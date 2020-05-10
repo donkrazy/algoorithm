@@ -15,14 +15,13 @@ int main() {
     int cases;
     cin >> cases;
     while(cases--) {
-        int lines;
-        cin >> lines;
-        cin.ignore();
-        while (lines--) {
-            string line;
-            getline(cin, line);
-            cout << cases << '/' << lines << '/' << line << endl;
+        cin >> n;
+        for (int x = 0; x < n; x++) {
+            for (int y = 0; y < n; y++) {
+                cin >> board[y][x];
+            }
         }
+        cout << (jump(0, 0) ? "YES" : "NO") << endl;
     }
     return 0;
 }
